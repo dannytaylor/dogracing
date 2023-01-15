@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://cayur3lgap4hc"]
+
+[ext_resource type="PackedScene" uid="uid://bxk23onaylaq7" path="res://3d/terrain.tscn" id="1_5wlsg"]
+[ext_resource type="PackedScene" uid="uid://b8dks1uvunv0l" path="res://player.tscn" id="2_uq7bl"]
+[ext_resource type="AudioStream" uid="uid://dsbl8fw5tat3c" path="res://2d/desert_ambience.ogg" id="3_syrko"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_y0esp"]
+sky_top_color = Color(0.407843, 0.415686, 0.686275, 1)
+sky_horizon_color = Color(0.886275, 0.568627, 0.372549, 1)
+
+[sub_resource type="Sky" id="Sky_52lqe"]
+sky_material = SubResource("ProceduralSkyMaterial_y0esp")
+
+[sub_resource type="Environment" id="Environment_n3s7j"]
+background_mode = 2
+background_energy_multiplier = 0.75
+sky = SubResource("Sky_52lqe")
+ambient_light_source = 3
+ambient_light_sky_contribution = 0.5
+ssil_radius = 3.27
+sdfgi_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.03
+volumetric_fog_length = 128.0
+volumetric_fog_sky_affect = 0.0
+volumetric_fog_temporal_reprojection_enabled = false
+
+[node name="main" type="Node3D"]
+
+[node name="terrain" parent="." instance=ExtResource("1_5wlsg")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, -31.5561, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.260774, 2.72008e-08, -0.9654, -0.0888893, 0.995752, 0.0240108, 0.961299, 0.0920751, -0.259666, 0, 128.794, 0)
+light_color = Color(0.878431, 0.643137, 0.45098, 1)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_n3s7j")
+
+[node name="spawn" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -301.022, -39.0342, 298.202)
+
+[node name="player" parent="spawn" instance=ExtResource("2_uq7bl")]
+top_level = true
+
+[node name="ambience" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_syrko")
+volume_db = -9.0
+autoplay = true

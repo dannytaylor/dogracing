@@ -1,0 +1,88 @@
+[gd_scene load_steps=7 format=3 uid="uid://cbmk4t3yj1fly"]
+
+[ext_resource type="Script" path="res://archive/racer_ray.gd" id="1_b4pjg"]
+[ext_resource type="PackedScene" uid="uid://c2gskfwhsi36s" path="res://3d/bottle.glb" id="2_kp51a"]
+[ext_resource type="Script" path="res://archive/trail3d.gd" id="3_2ctmx"]
+[ext_resource type="Material" uid="uid://b8ljo7wbuosfy" path="res://3d/trailmaterial.tres" id="4_on866"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5igpd"]
+friction = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lr6y0"]
+size = Vector3(1.46006, 2.44642, 0.227501)
+
+[node name="root" type="Node3D"]
+
+[node name="racer" type="RigidBody3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+physics_material_override = SubResource("PhysicsMaterial_5igpd")
+gravity_scale = 2.0
+linear_damp = 5.0
+angular_damp = 5.0
+script = ExtResource("1_b4pjg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.41421, -1.7195)
+shape = SubResource("BoxShape3D_lr6y0")
+
+[node name="bottle" parent="racer/CollisionShape3D" instance=ExtResource("2_kp51a")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, -1.19209e-07)
+
+[node name="rtCamera" type="RemoteTransform3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+remote_path = NodePath("../../SpringArmPivot")
+update_rotation = false
+update_scale = false
+
+[node name="rtFL" type="RemoteTransform3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, -4)
+remote_path = NodePath("../../rayFL")
+update_rotation = false
+
+[node name="rtFR" type="RemoteTransform3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -4)
+remote_path = NodePath("../../rayFR")
+update_rotation = false
+
+[node name="rtBL" type="RemoteTransform3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+remote_path = NodePath("../../rayBL")
+update_rotation = false
+
+[node name="rtBR" type="RemoteTransform3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+remote_path = NodePath("../../rayBL")
+update_rotation = false
+
+[node name="rtTrail" type="RemoteTransform3D" parent="racer"]
+remote_path = NodePath("../../Trail3D")
+
+[node name="SpringArmPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 2, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
+spring_length = 2.0
+margin = 0.1
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
+fov = 90.0
+far = 640.0
+
+[node name="rayFL" type="RayCast3D" parent="." groups=["rays"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, -4)
+
+[node name="rayFR" type="RayCast3D" parent="." groups=["rays"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, -4)
+
+[node name="rayBL" type="RayCast3D" parent="." groups=["rays"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)
+
+[node name="rayBR" type="RayCast3D" parent="." groups=["rays"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+
+[node name="Trail3D" type="MeshInstance3D" parent="."]
+material_override = ExtResource("4_on866")
+script = ExtResource("3_2ctmx")
+
+[editable path="racer/CollisionShape3D/bottle"]

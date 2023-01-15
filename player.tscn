@@ -1,0 +1,208 @@
+[gd_scene load_steps=21 format=3 uid="uid://b8dks1uvunv0l"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_d6dne"]
+[ext_resource type="PackedScene" uid="uid://c2gskfwhsi36s" path="res://3d/bottle.glb" id="2_72ru3"]
+[ext_resource type="Texture2D" uid="uid://cx8sxhi87eqjs" path="res://2d/spark/spark_05_rotated.png" id="3_yvhli"]
+[ext_resource type="Texture2D" uid="uid://buubh28qpakew" path="res://2d/spark/spark_06_rotated.png" id="4_uivck"]
+[ext_resource type="Material" uid="uid://b8ljo7wbuosfy" path="res://3d/trailmaterial.tres" id="5_p58fl"]
+[ext_resource type="AudioStream" uid="uid://rtu4m42lgpey" path="res://2d/engine_loop_0.wav" id="6_eitu7"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2bphs"]
+radius = 1.0
+height = 5.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bum72"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4lsau"]
+
+[sub_resource type="Gradient" id="Gradient_hpqmr"]
+offsets = PackedFloat32Array(0, 0.612766)
+colors = PackedColorArray(1, 0.250581, 0.272163, 0.815686, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ymy8m"]
+gradient = SubResource("Gradient_hpqmr")
+fill_from = Vector2(0, 0.149573)
+fill_to = Vector2(0, 0.863248)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g3ftr"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_ymy8m")
+uv1_triplanar_sharpness = 0.00929067
+proximity_fade_distance = 0.0
+distance_fade_mode = 1
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_hexkx"]
+lightmap_size_hint = Vector2i(11, 13)
+material = SubResource("StandardMaterial3D_g3ftr")
+radius = 0.3
+height = 1.6
+
+[sub_resource type="Gradient" id="Gradient_1a1q3"]
+offsets = PackedFloat32Array(0.246809, 0.842553)
+colors = PackedColorArray(0.886275, 0.682353, 0.34902, 0.815686, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_11dvr"]
+gradient = SubResource("Gradient_1a1q3")
+fill_from = Vector2(0, 0.0384615)
+fill_to = Vector2(0, 0.65812)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gev67"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_11dvr")
+uv1_triplanar_sharpness = 0.00929067
+proximity_fade_distance = 0.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vjygj"]
+lightmap_size_hint = Vector2i(11, 13)
+material = SubResource("StandardMaterial3D_gev67")
+radius = 0.3
+height = 1.6
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ay8oy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_yvhli")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_uivck")
+}],
+"loop": true,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_53bfh"]
+length = 5.0
+slide_on_slope = true
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_y8rf6"]
+lightmap_size_hint = Vector2i(11, 13)
+material = ExtResource("5_p58fl")
+radius = 0.2
+
+[node name="player" type="Node3D"]
+
+[node name="player" type="CharacterBody3D" parent="."]
+script = ExtResource("1_d6dne")
+
+[node name="PlayerRootCollision" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_2bphs")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="player/PlayerRootCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.96833e-07, 2.25148, -0.944071)
+visible = false
+mesh = SubResource("CapsuleMesh_bum72")
+skeleton = NodePath("../../..")
+
+[node name="ArmLeft" type="MeshInstance3D" parent="player/PlayerRootCollision"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.5, -2.7485, -1.5756)
+visible = false
+mesh = SubResource("CapsuleMesh_4lsau")
+skeleton = NodePath("../meshes/springarms/leftdown")
+
+[node name="ArmRight" type="MeshInstance3D" parent="player/PlayerRootCollision"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1.5, -2.7485, -1.5756)
+visible = false
+mesh = SubResource("CapsuleMesh_4lsau")
+skeleton = NodePath("../meshes/springarms/rightdown")
+
+[node name="meshes" type="Node3D" parent="player/PlayerRootCollision"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.96833e-07, 2.2515, -0.944071)
+
+[node name="bottle" parent="player/PlayerRootCollision/meshes" instance=ExtResource("2_72ru3")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.519703, 0.0345187)
+
+[node name="spark_05_rotated" parent="player/PlayerRootCollision/meshes/bottle" index="1"]
+visible = false
+
+[node name="lefttrail" type="Node3D" parent="player/PlayerRootCollision/meshes/bottle/ketchup" index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1, -1.91013, 0.00378132)
+
+[node name="cabtrail" type="MeshInstance3D" parent="player/PlayerRootCollision/meshes/bottle/ketchup/lefttrail"]
+transform = Transform3D(1, 0, 0, 0, -0.00317649, 0.999995, 0, -0.999995, -0.00317649, 0, -6.55651e-07, 0.712524)
+mesh = SubResource("CapsuleMesh_hexkx")
+skeleton = NodePath("../..")
+
+[node name="righttrail" type="Node3D" parent="player/PlayerRootCollision/meshes/bottle/mustard" index="1"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1, -1.86784, 0)
+
+[node name="cabtrail" type="MeshInstance3D" parent="player/PlayerRootCollision/meshes/bottle/mustard/righttrail"]
+transform = Transform3D(1, 0, 0, 0, -0.00317649, 0.999994, 0, -0.999994, -0.00317649, 0, -4.17233e-07, 0.688983)
+mesh = SubResource("CapsuleMesh_vjygj")
+skeleton = NodePath("../..")
+
+[node name="sparks" type="AnimatedSprite3D" parent="player/PlayerRootCollision/meshes"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.449871, -7.58156)
+modulate = Color(0.592157, 0.894118, 0.964706, 1)
+frames = SubResource("SpriteFrames_ay8oy")
+playing = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="player/PlayerRootCollision/meshes/sparks"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.360286, -0.0202389)
+light_color = Color(0.0470588, 0.8, 1, 1)
+light_energy = 2.0
+omni_range = 3.547
+omni_attenuation = 1.6818
+
+[node name="OmniLight3D" type="OmniLight3D" parent="player/PlayerRootCollision/meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.149711, 0.759209)
+light_color = Color(1, 0.34902, 0.427451, 1)
+light_energy = 0.25
+omni_range = 1.17541
+omni_attenuation = 2.82843
+
+[node name="springarms" type="Node3D" parent="player/PlayerRootCollision/meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7)
+
+[node name="leftdown" type="SpringArm3D" parent="player/PlayerRootCollision/meshes/springarms"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -2.5, 0, 0)
+shape = SubResource("SeparationRayShape3D_53bfh")
+spring_length = 2.0
+
+[node name="rightdown" type="SpringArm3D" parent="player/PlayerRootCollision/meshes/springarms"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 2.5, 0, 0)
+shape = SubResource("SeparationRayShape3D_53bfh")
+spring_length = 2.0
+
+[node name="leftfront" type="SpringArm3D" parent="player/PlayerRootCollision/meshes/springarms"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, -2.5, 0, 0)
+shape = SubResource("SeparationRayShape3D_53bfh")
+spring_length = 4.0
+
+[node name="rightfront" type="SpringArm3D" parent="player/PlayerRootCollision/meshes/springarms"]
+transform = Transform3D(1, 0, 0, 0, -1, 8.74228e-08, 0, -8.74228e-08, -1, 2.5, -0.469986, 0)
+shape = SubResource("SeparationRayShape3D_53bfh")
+spring_length = 4.0
+
+[node name="cabtrail" type="Node3D" parent="player/PlayerRootCollision/meshes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.619842, 0.623576)
+
+[node name="cabtrail" type="MeshInstance3D" parent="player/PlayerRootCollision/meshes/cabtrail"]
+transform = Transform3D(1, 0, 0, 0, -0.00317649, 0.999995, 0, -0.999995, -0.00317649, 0, 0, 0.555898)
+mesh = SubResource("CapsuleMesh_y8rf6")
+skeleton = NodePath("../..")
+
+[node name="engine_sfx" type="AudioStreamPlayer" parent="player"]
+stream = ExtResource("6_eitu7")
+volume_db = -30.0
+autoplay = true
+
+[node name="SpringArmPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, -2.38419e-07, 5.96046e-08)
+
+[node name="CameraSpringArm" type="SpringArm3D" parent="SpringArmPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32247, 0)
+spring_length = 5.0
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot/CameraSpringArm"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00236154, 9.99636)
+fov = 90.0
+far = 640.0
+
+[editable path="player/PlayerRootCollision/meshes/bottle"]

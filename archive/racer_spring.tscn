@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://dfbsohhpdhwph"]
+
+[ext_resource type="Script" path="res://archive/racer.gd" id="1_tgvbt"]
+[ext_resource type="PackedScene" uid="uid://c2gskfwhsi36s" path="res://3d/bottle.glb" id="2_oruu1"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vj4q3"]
+margin = 0.1
+size = Vector3(2.69812, 4.78215, 0.543842)
+
+[node name="root" type="Node3D"]
+
+[node name="racer" type="RigidBody3D" parent="."]
+linear_damp = 5.0
+angular_damp = 5.0
+script = ExtResource("1_tgvbt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.41421, -1.7195)
+shape = SubResource("BoxShape3D_vj4q3")
+
+[node name="bottle" parent="racer/CollisionShape3D" instance=ExtResource("2_oruu1")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 2, -8.74228e-08)
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+remote_path = NodePath("../../SpringArmPivot")
+update_rotation = false
+update_scale = false
+
+[node name="Ray" type="RayCast3D" parent="racer"]
+target_position = Vector3(0, -20, 0)
+
+[node name="HoverSpring" type="SpringArm3D" parent="racer"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1, -1.63721)
+spring_length = 300.0
+
+[node name="SpringArmPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 2, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="SpringArmPivot"]
+spring_length = 2.0
+margin = 0.1
+
+[node name="Camera3D" type="Camera3D" parent="SpringArmPivot/SpringArm3D"]
+fov = 90.0
+far = 640.0
+
+[editable path="racer/CollisionShape3D/bottle"]

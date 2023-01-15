@@ -1,0 +1,19 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://bhlhha1715o56"]
+
+[sub_resource type="Gradient" id="Gradient_41qis"]
+offsets = PackedFloat32Array(0.519149, 0.680851, 0.842553)
+colors = PackedColorArray(0.886275, 0.682353, 0.34902, 0.815686, 0.789252, 0.614186, 0.316038, 0.407843, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ukwnm"]
+gradient = SubResource("Gradient_41qis")
+fill_from = Vector2(0, 0.0384615)
+fill_to = Vector2(0, 0.461538)
+
+[resource]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+albedo_texture = SubResource("GradientTexture2D_ukwnm")
+uv1_triplanar_sharpness = 0.00929067
+proximity_fade_distance = 0.0
